@@ -5,6 +5,6 @@ type LoginResponse struct {
 }
 
 type LoginRequest struct {
-	Email string `json:" "`
-	Password string `json:"password"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
 }
