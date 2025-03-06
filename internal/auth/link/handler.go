@@ -32,14 +32,23 @@ func (handler *LinkHandler) Create() http.HandlerFunc {
 			return
 		}
 		link := NewLink(body.Url)
+		for {
+			existedLink, _ := handler.LinkRepository.GetByHash(link.Hash)
+			if existedLink == nil {
+				break
+			}
+			link.GenerateHash()
+		}
 		createdLink, err := handler.LinkRepository.Create(link)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
-		}
+		} 
 		resp.WriteJson(w, createdLink, 201)
 	}
 }
+
+
 
 func (handler *LinkHandler) Goto() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -65,3 +74,5 @@ func (handler *LinkHandler) Delete() http.HandlerFunc {
 		fmt.Println(id)
 	}
 }
+
+
