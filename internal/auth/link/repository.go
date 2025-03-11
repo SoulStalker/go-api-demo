@@ -52,7 +52,7 @@ func (repo *LinkRepository) Delete (id int) error {
 
 func (repo *LinkRepository) FindById (id int) (*Link, error) {
 	var link Link
-	result := repo.Database.DB.First(&link{}, id)
+	result := repo.Database.DB.First(&link, id)
 	if result.Error !=  nil {
 		return nil, result.Error
 	}
