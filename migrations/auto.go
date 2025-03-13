@@ -1,8 +1,8 @@
 package main
 
 import (
-	"go/api-demo/internal/auth/link"
-	"go/api-demo/internal/auth/user"
+	"go/api-demo/internal/link"
+	"go/api-demo/internal/user"
 	"os"
 
 	"github.com/joho/godotenv"

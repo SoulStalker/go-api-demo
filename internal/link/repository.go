@@ -2,7 +2,6 @@ package link
 
 import (
 	"go/api-demo/pkg/db"
-
 	"gorm.io/gorm/clause"
 )
 
