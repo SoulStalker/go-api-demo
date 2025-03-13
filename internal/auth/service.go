@@ -25,9 +25,9 @@ func (service *AuthService) Register(email, password, name string) (string, erro
 		return "", err
 	}
 	user := &user.User{
-		Email: email,
+		Email:    email,
 		Password: string(hashedPassword),
-		Name: name,
+		Name:     name,
 	}
 	_, err = service.UserRepository.Create(user)
 	if err != nil {
@@ -35,7 +35,6 @@ func (service *AuthService) Register(email, password, name string) (string, erro
 	}
 	return user.Email, nil
 }
-
 
 func (service *AuthService) Login(email, password string) (string, error) {
 	existedUser, _ := service.UserRepository.FindByEmail(email)
