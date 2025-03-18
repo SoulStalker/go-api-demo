@@ -20,16 +20,17 @@ func main() {
 	linkRepository := link.NewLinkRepository(db)
 	userRepository := user.NewUserRepository(db)
 
-	// Services 
+	// Services
 	authService := auth.NewAuthService(userRepository)
 
 	// Handlers
 	auth.NewAuthHandler(router, auth.AuthHandlerDeps{
-		Config: conf,
+		Config:      conf,
 		AuthService: authService,
 	})
 	link.NewLinkHandler(router, link.LinkHandlerDeps{
 		LinkRepository: linkRepository,
+		Config:         conf,
 	})
 
 	// Middlewares
