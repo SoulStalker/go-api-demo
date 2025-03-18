@@ -36,8 +36,8 @@ func (j *JWT) Parse(token string) (bool, *JWTData) {
 	if err != nil {
 		return false, nil
 	}
-	emal := t.Claims.(jwt.MapClaims)["email"]
+	email := t.Claims.(jwt.MapClaims)["email"]
 	return t.Valid, &JWTData{
-		Email: emal.(string),
+		Email: email.(string),
 	}
 }

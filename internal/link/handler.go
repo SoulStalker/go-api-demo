@@ -1,6 +1,7 @@
 package link
 
 import (
+	"fmt"
 	"go/api-demo/configs"
 	"go/api-demo/pkg/middleware"
 	"go/api-demo/pkg/req"
@@ -12,8 +13,8 @@ import (
 )
 
 type LinkHandlerDeps struct {
-	LinkRepository *LinkRepository 
-	Config *configs.Config  
+	LinkRepository *LinkRepository
+	Config         *configs.Config
 }
 
 type LinkHandler struct {
@@ -67,6 +68,10 @@ func (handler *LinkHandler) Goto() http.HandlerFunc {
 
 func (handler *LinkHandler) Update() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		email, ok := r.Context().Value(middleware.ContextEmailKey).(string)
+		if ok {
+			fmt.Println(email )
+		}
 		body, err := req.HandleBody[LinkUpdateRequest](&w, r)
 		if err != nil {
 			return
