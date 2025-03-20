@@ -49,7 +49,7 @@ func (repo *LinkRepository) Delete (id int) error {
 	return nil
 }
 
-func (repo *LinkRepository) FindById (id int) (*Link, error) {
+func (repo *LinkRepository) FindById(id int) (*Link, error) {
 	var link Link
 	result := repo.Database.DB.First(&link, id)
 	if result.Error !=  nil {
@@ -58,7 +58,7 @@ func (repo *LinkRepository) FindById (id int) (*Link, error) {
 	return &link, nil
 }
 
-func (repo *LinkRepository) GetAll (limit, offset int) []Link {
+func (repo *LinkRepository) GetAll(limit, offset int) []Link {
 	var links []Link
 
 	repo.Database.
