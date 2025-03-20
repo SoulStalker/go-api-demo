@@ -57,3 +57,26 @@ func (repo *LinkRepository) FindById (id int) (*Link, error) {
 	}
 	return &link, nil
 }
+
+func (repo *LinkRepository) GetAll (limit, offset int) []Link {
+	var links []Link
+
+	repo.Database.
+		Table("links").
+		Where("deleted_at is null").
+		Order("id asc").
+		Limit(limit).
+		Offset(offset).
+		Scan(&links)
+
+	return links
+}
+
+func (repo *LinkRepository) Count() int64 {
+	var cnt int64
+	repo.Database.
+		Table("links").
+		Where("deleted_at is null").
+		Count(&cnt)
+	return cnt
+}
