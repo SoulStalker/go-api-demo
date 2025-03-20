@@ -3,7 +3,7 @@ package link
 import (
 	"fmt"
 	"go/api-demo/configs"
-	"go/api-demo/internal/stat"
+	"go/api-demo/pkg/di"
 	"go/api-demo/pkg/middleware"
 	"go/api-demo/pkg/req"
 	"go/api-demo/pkg/resp"
@@ -15,13 +15,13 @@ import (
 
 type LinkHandlerDeps struct {
 	LinkRepository *LinkRepository
-	StatRepository *stat.StatRepository
+	StatRepository di.IStatRepository
 	Config         *configs.Config
 }
 
 type LinkHandler struct {
 	LinkRepository *LinkRepository
-	StatRepository *stat.StatRepository
+	StatRepository di.IStatRepository
 }
 
 func NewLinkHandler(router *http.ServeMux, deps LinkHandlerDeps) {
