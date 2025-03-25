@@ -5,9 +5,9 @@ import (
 	"go/api-demo/configs"
 	"go/api-demo/internal/auth"
 	"go/api-demo/internal/link"
-	"go/api-demo/internal/stat"
 	"go/api-demo/internal/user"
 	"go/api-demo/pkg/db"
+	"go/api-demo/pkg/event"
 	"go/api-demo/pkg/middleware"
 	"net/http"
 )
@@ -16,11 +16,12 @@ func main() {
 	conf := configs.LoadConfig()
 	db := db.NewDb(conf)
 	router := http.NewServeMux()
+	eventBus := event.NewEventBus()
 
 	// Repositories
 	linkRepository := link.NewLinkRepository(db)
 	userRepository := user.NewUserRepository(db)
-	statRepository := stat.NewStatRepository(db)
+	// statRepository := stat.NewStatRepository(db)
 
 	// Services
 	authService := auth.NewAuthService(userRepository)
@@ -32,7 +33,8 @@ func main() {
 	})
 	link.NewLinkHandler(router, link.LinkHandlerDeps{
 		LinkRepository: linkRepository,
-		StatRepository: statRepository,
+		EventBus: eventBus,
+		// StatRepository: statRepository,
 		Config:         conf,
 	})
 
