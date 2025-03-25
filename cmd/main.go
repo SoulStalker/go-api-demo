@@ -43,7 +43,10 @@ func main() {
 		// StatRepository: statRepository,
 		Config:         conf,
 	})
-
+	stat.NewStatHandler(router, &stat.StatHandlerDeps{
+		StatRepository: statRepository,
+	})
+	
 	// Middlewares
 	stack := middleware.Chain(
 		middleware.CORS,
@@ -56,7 +59,7 @@ func main() {
 	}
 
 	go statService.AddClick()
-	
+
 	fmt.Println("Server is listening on port 8081")
 	server.ListenAndServe()
 
