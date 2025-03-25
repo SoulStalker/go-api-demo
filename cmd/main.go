@@ -5,6 +5,7 @@ import (
 	"go/api-demo/configs"
 	"go/api-demo/internal/auth"
 	"go/api-demo/internal/link"
+	"go/api-demo/internal/stat"
 	"go/api-demo/internal/user"
 	"go/api-demo/pkg/db"
 	"go/api-demo/pkg/event"
@@ -21,10 +22,14 @@ func main() {
 	// Repositories
 	linkRepository := link.NewLinkRepository(db)
 	userRepository := user.NewUserRepository(db)
-	// statRepository := stat.NewStatRepository(db)
+	statRepository := stat.NewStatRepository(db)
 
 	// Services
 	authService := auth.NewAuthService(userRepository)
+	statService := stat.NewStatService(&stat.StatServiceDeps{
+		EventBus: eventBus,
+		StatRepository: statRepository,
+	})
 
 	// Handlers
 	auth.NewAuthHandler(router, auth.AuthHandlerDeps{
@@ -34,6 +39,7 @@ func main() {
 	link.NewLinkHandler(router, link.LinkHandlerDeps{
 		LinkRepository: linkRepository,
 		EventBus: eventBus,
+		StatService: statService,
 		// StatRepository: statRepository,
 		Config:         conf,
 	})
@@ -49,6 +55,8 @@ func main() {
 		Handler: stack(router),
 	}
 
+	go statService.AddClick()
+	
 	fmt.Println("Server is listening on port 8081")
 	server.ListenAndServe()
 
