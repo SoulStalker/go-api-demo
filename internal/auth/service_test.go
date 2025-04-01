@@ -30,3 +30,4 @@ func TestRegisterSuccess(t *testing.T) {
 		t.Fatalf("Email %s do not math %s", email, initEmail)
 	}
 }
+
