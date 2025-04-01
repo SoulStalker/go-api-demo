@@ -41,8 +41,37 @@ func bootstrap() (*auth.AuthHandler, sqlmock.Sqlmock, error) {
 	return &handler, mock, nil
 }
 
-func TestLoginSuccess(t *testing.T) {
-	handler, _, err := bootstrap()
+func TestLoginHandlerSuccess(t *testing.T) {
+	handler, mock, err := bootstrap()
+	rows :=  sqlmock.NewRows([]string{"email", "password", "name"})
+	mock.ExpectQuery("SELECT").WillReturnRows(rows)
+	mock.ExpectBegin()
+	mock.ExpectQuery("INSERT").WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(1))
+	mock.ExpectCommit()
+	if err != nil {
+		t.Fatal(err)
+		return
+	}
+	data, _ := json.Marshal(&auth.RegisterRequest{
+		Email: "almaz@yandex.ru",
+		Password: "123456789",
+		Name: "vasya",
+	})
+	reader := bytes.NewReader(data)
+	w := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodPost, "/auth/register", reader)
+	handler.Register()(w, req)
+	if w.Code != http.StatusCreated {
+		t.Errorf("got %d, expected %d", w.Code, 201)
+	}
+}
+
+
+func TestRegisterHandlerSuccess(t *testing.T) {
+	handler, mock, err := bootstrap()
+	rows :=  sqlmock.NewRows([]string{"email", "password"}).
+		AddRow("almaz@ya.ru", "$2a$10$7qXFxu3/EHCz58xPKvjaougaMSm3.Dk/RbJEpG./CkRgTk/mZMCOG")
+	mock.ExpectQuery("SELECT").WillReturnRows(rows)
 	if err != nil {
 		t.Fatal(err)
 		return
